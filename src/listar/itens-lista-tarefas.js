@@ -6,10 +6,16 @@ import {A} from 'hookrouter';
 
 function ItensListaTarefas(props){
 
+
+    function marcarConcluida(tarefa){
+        return tarefa.concluida ? 'line-through' : 'none';
+    }
+
     return(
         props.tarefas.map(tarefa=>
            <tr key={tarefa.id} data-test="tarefa">
-               <td width="75%" data-testid="nome-tarefa">
+               <td width="75%" data-testid="nome-tarefa"
+                style={ {textDecoration: marcarConcluida(tarefa)}}>
                     {tarefa.nome}
                </td>
                <td classNAme="text-right">
