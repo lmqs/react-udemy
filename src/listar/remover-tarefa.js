@@ -54,7 +54,7 @@ function RemoverTarefa(props){
                     <strong>{props.tarefa.nome}</strong>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleRemoverTarefa} data-testid="btn-concluir">
+                    <Button variant="primary" onClick={handleRemoverTarefa} data-testid="btn-remover">
                         Sim
                     </Button>
                     <Button variant="light" onClick={handleFecharModal} data-testid="btn-fechar-modal">

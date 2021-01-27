@@ -30,8 +30,8 @@ function CadastrarTarefa() {
     }
 
     function handleFecharModal(event){
-        setExibeModal(false);
-        <A href="/"/>
+        //setExibeModal(false);
+        navigate('/');
     }
     return (
         <div>
