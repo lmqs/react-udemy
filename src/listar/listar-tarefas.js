@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { A } from 'hookrouter';
-import {Table} from 'react-bootstrap';
+import {Table, Form} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import ItensListaTarefas from './itens-lista-tarefas';
 import Paginacao from './paginacao';
-
+import Ordenacao from './ordenacao';
 
 function ListarTarefas(){
 
@@ -18,12 +18,18 @@ function ListarTarefas(){
     const [paginaAtual, setPaginaAtual] = useState(1); //sempre a pagina atual vai ser 1
     const [ordenarAsc, setOrdernarAsc] = useState(false);
     const [ordenarDesc, setOrdernarDesc] = useState(false);
+    const [filtroTarefa, setFiltroTarefa] = useState('');
 
     //carregar assim que o componente for criado
     useEffect(()=> {
         function obterTarefas(){
             const tarefasDb = localStorage['tarefas'];
             let listaTarefas = tarefasDb ? JSON.parse(tarefasDb) : [];
+
+            /**filtrar */
+            listaTarefas = listaTarefas.filter(
+                t => t.nome.toLowerCase().indexOf(filtroTarefa.toLowerCase()) >= 0
+            );
 
             /**ordernar */
             if(ordenarAsc){
@@ -43,7 +49,7 @@ function ListarTarefas(){
             obterTarefas();
             setCarregarTarefas(false);
         }
-    }, [carregarTarefas, paginaAtual]); //vai ficar escutando também o página atual
+    }, [carregarTarefas, paginaAtual, ordenarAsc, ordenarDesc, filtroTarefa]); //vai ficar escutando também o página atual
     //seja chamado apenas qdo algum state trabalhe com ele, qdo esse
     //estado seja alterado
 
@@ -70,6 +76,11 @@ function ListarTarefas(){
         setCarregarTarefas(true);
     }
 
+
+    function handleFiltrar(event){
+        setFiltroTarefa(event.target.value);
+        setCarregarTarefas(true);
+    }
     return (
         
         <div className="text-center">
@@ -80,6 +91,10 @@ function ListarTarefas(){
                         <th>
                             <a href="/"  onClick={handleOrdenar} >
                                 Tarefa
+                                &nbsp;
+                                <Ordenacao ordenarAsc={ordenarAsc} 
+                                    ordenarDesc={ordenarDesc}
+                                />
                             </a>
                         </th>
                         <th><A href="/cadastrar" className="btn btn-success btn-sm" data-testid="btn-nova-tarefa">
@@ -88,6 +103,19 @@ function ListarTarefas(){
                                 Nova Tarefa
                             </A>
                          </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <Form.Control type="text"
+                                value={filtroTarefa}
+                                onChange={handleFiltrar}
+                                data-testid="txt-tarefa" 
+                                className="filtro-tarefa"
+                                />
+                        </th>
+                        <th>
+                            &nbsp;
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
